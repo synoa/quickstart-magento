@@ -624,4 +624,25 @@ EOF
 crontab -u ec2-user magento.cron
 
 
+# ****************** BEGIN SYNOA ADJUSTMENTS *******************
 
+# Install ruby and wget
+sudo yum -y update && sudo yum -y install ruby wget
+
+# Define the CodeDeploy Bucket name
+CODEDEPLOY_BUCKET_NAME="aws-codedeploy-${EC2_REGION}"
+
+# Download the install file
+wget https://${CODEDEPLOY_BUCKET_NAME}.s3.amazonaws.com/latest/install -O /home/ec2-user/install
+
+# If the install file exists, execute it to install the codedeploy agent
+if [ -f "/home/ec2-user/install" ]; then
+    chmod +x /home/ec2-user//install && sudo /home/ec2-user/install auto
+
+    # start the code deploy agent
+    sudo service codedeploy-agent start
+    # Automatically start on reboot
+    chkconfig codedeploy-agent on
+fi
+
+# ****************** END SYNOA ADJUSTMENTS *******************
