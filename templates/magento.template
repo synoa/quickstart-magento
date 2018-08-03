@@ -350,7 +350,7 @@ Parameters:
       the Magento store (Check here for the supported Language command http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/install-cli-install.html)
     Type: String
   MagentoReleaseMedia:
-    Default: ''
+    Default: 'https://s3.eu-central-1.amazonaws.com/synoa-magento2/Magento-CE-2.1.9-2017-09-13-03-35-18.tar.gz'
     Description: Amazon S3 path to download magento .tar.gz file (https://s3.amazonaws.com/mybucket/Magento-CE-2.1.9_sample_data-2017-09-13-03-57-21.tar.gz)
     Type: String
   MagentoTimezone:
@@ -380,7 +380,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
       (-).
-    Default: aws-quickstart
+    Default: synoa-cloudformation
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
@@ -389,7 +389,7 @@ Parameters:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/).
-    Default: quickstart-magento/
+    Default: submodules/magento/
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).

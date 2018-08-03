@@ -64,7 +64,7 @@ EC2_AVAIL_ZONE=`curl -s http://169.254.169.254/latest/meta-data/placement/availa
 EC2_REGION="`echo \"$EC2_AVAIL_ZONE\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
 
 yum -y update
-yum -y install nginx php70-fpm php70-cli php70-mysqlnd php70-soap php70-xml php70-zip php70-json php70-mcrypt php70-intl php70-mbstring php70-zip php70-gd mysql56
+yum -y install nginx php70-fpm php70-cli php70-mysqlnd php70-soap php70-xml php70-zip php70-json php70-mcrypt php70-intl php70-mbstring php70-zip php70-gd mysql56 ruby wget
 
 chkconfig nginx on
 chkconfig php-fpm-7.0 on
@@ -626,23 +626,22 @@ crontab -u ec2-user magento.cron
 
 # ****************** BEGIN SYNOA ADJUSTMENTS *******************
 
-# Install ruby and wget
-sudo yum -y update && sudo yum -y install ruby wget
+# # Define the CodeDeploy Bucket name
+# CODEDEPLOY_BUCKET_NAME="aws-codedeploy-${EC2_REGION}"
 
-# Define the CodeDeploy Bucket name
-CODEDEPLOY_BUCKET_NAME="aws-codedeploy-${EC2_REGION}"
+# # Download the install file
+# wget "https://${CODEDEPLOY_BUCKET_NAME}.s3.amazonaws.com/latest/install" -O /home/ec2-user/install
 
-# Download the install file
-wget https://${CODEDEPLOY_BUCKET_NAME}.s3.amazonaws.com/latest/install -O /home/ec2-user/install
+# # If the install file exists, execute it to install the codedeploy agent
+# if [ -f "/home/ec2-user/install" ]; then
+#     chmod +x /home/ec2-user/install && sudo /home/ec2-user/install auto
 
-# If the install file exists, execute it to install the codedeploy agent
-if [ -f "/home/ec2-user/install" ]; then
-    chmod +x /home/ec2-user//install && sudo /home/ec2-user/install auto
-
-    # start the code deploy agent
-    sudo service codedeploy-agent start
-    # Automatically start on reboot
-    chkconfig codedeploy-agent on
-fi
-
+#     # start the code deploy agent
+#     service codedeploy-agent start
+#     # Automatically start on reboot
+#     chkconfig codedeploy-agent on
+# else
+#     echo "Unable to find /home/ec2-user/install"
+#     echo "Cannot install codedeploy-agent"
+# fi
 # ****************** END SYNOA ADJUSTMENTS *******************
